@@ -1,0 +1,47 @@
+// -*- mode: groovy; -*-
+
+apply plugin: 'java'
+apply plugin: 'idea'
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.0'
+    }
+}
+apply plugin: 'com.github.johnrengelman.shadow'
+
+tasks.withType(JavaCompile) {
+    sourceCompatibility = "1.8"
+    targetCompatibility = "1.8"
+}
+
+idea {
+    module {
+        downloadJavadoc = true
+        downloadSources = true
+    }
+}
+
+version = '1.0'
+
+repositories {
+    mavenCentral()
+    maven { url { "http://files.couchbase.com/maven2" } }
+}
+
+dependencies {
+    compile(group: 'com.couchbase.client', name: 'core-io', version: '1.1.0-dp')
+    compile(group: 'org.slf4j', name: 'slf4j-simple', version: '1.6.1')
+}
+
+jar.manifest.mainAttributes(
+        'Implementation-Title': 'Couchbase DCP Consumer',
+        'Implementation-Version': version,
+        'Implementation-Vendor': 'Couchbase, Inc.',
+        'Specification-Title': 'com.couchbase.dcp.consumer',
+        'Specification-Version': version,
+        'Specification-Vendor': 'Couchbase, Inc.'
+)
